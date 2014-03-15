@@ -1,10 +1,17 @@
 <?php
-$con = mysql_connect("localhost","root","");
-if (!$con)
-  {
-  die('-1'. mysql_error());
-  }
-mysql_select_db("order_now", $con);
+/**
+		Connection configuration
+		
+    */
+	$configs = include('config.php');
+	// print_r($configs);
+	$con = mysql_connect($configs['host'],$configs['username'],$configs['password']);
+	if (!$con)
+	  {
+	  die('-1'. mysql_error());
+	  }
+	mysql_select_db($configs['db'], $con);
+
 $json_array = array();
 	
 	$query = "select * from orders where stat in (1,2) and cust_id=".$_REQUEST['cust_id'];
