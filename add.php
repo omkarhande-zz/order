@@ -14,7 +14,7 @@
 
 $json_array = array();
 	
-	$query = "select * from orders where stat in (1,2) and cust_id=".$_REQUEST['cust_id'];
+	$query = "select * from orders where stat in (1,2,3) and cust_id=".$_REQUEST['cust_id'];
 	// die($query);
 	$result = mysql_query($query,$con); 
 	if(mysql_num_rows($result)){
@@ -22,7 +22,7 @@ $json_array = array();
 			$order_id = $row['id'];
 			$status = $row['stat'];
 	}else{
-		echo "here now";
+		// echo "here now";
 		$date = getdate();
 		$query = "insert into orders(cust_id, date_added, stat, name) values(".$_REQUEST['cust_id'].", 
 			now(), 1, 'order-".$date['mday']."-".$date['month']."-".$date['year']."-".$date['hours'].":".$date['minutes']."')";
@@ -32,7 +32,7 @@ $json_array = array();
 	}
 	
 	//die($order_id);
-	if($status == 1){
+	if($status == 1 OR $status == 2){
 		$query = "insert into order_details(order_id, item_id, quant) values($order_id,".$_REQUEST['item_id'].",".$_REQUEST['quant'].")";
 		$rsp['response'] = "Item added";
 	}else{
