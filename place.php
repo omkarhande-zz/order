@@ -27,7 +27,9 @@
 			$query = "update orders set stat = 2 where id =".$order_id;
 			$result = mysql_query($query,$con); 
 			$row['rsp'] = "Order Placed";
-		}else{
+		}else if ($stat == 2){
+			$row['rsp'] = "Order is up for approval";
+		}else if ($stat == 3){
 			$row['rsp'] = "Order was already placed";
 		}
 		array_push($json_array,$row);

@@ -4,7 +4,7 @@
 		
     */
 	$configs = include('config.php');
-	// print_r($configs);
+	print_r($configs);
 	$con = mysql_connect($configs['host'],$configs['username'],$configs['password']);
 	if (!$con)
 	  {
@@ -17,7 +17,7 @@ $json_array = array();
 
 
 
-	$query = "select * from items where is_spec=1 order by group_id";
+	$query = "select * from gcm_users";
 	$result = mysql_query($query,$con); 
 	
 	
@@ -25,8 +25,8 @@ $json_array = array();
 	if($result!=FALSE){
 	while ($row = mysql_fetch_array($result)) {
 		$row_array['name'] = $row['name'];
-		$row_array['id'] = $row['id'];
-		$row_array['des'] = $row['des'];
+		$row_array['email'] = $row['email'];
+		$row_array['gcm_regid'] = $row['gcm_regid'];
 		array_push($json_array,$row_array);
 	}
 		echo json_encode($json_array);
