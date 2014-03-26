@@ -14,10 +14,10 @@ $registrationIDs = array();
 
 if($type==1){
 	$cust_id = $_REQUEST['user_id'];
-	$query = "select gcm_id from users where user_type = 1";
+	$query = "select u.gcm_id from users u join pairs p on p.waiter_id = u.id where p.cust_id=".$cust_id;
 }else{
 	$waiter_id = $_REQUEST['user_id'];
-	$query = "select gcm_id from users where user_type = 2";
+	$query = "select u.gcm_id from users u join pairs p on p.cust_id = u.id where p.waiter_id=".$waiter_id;
 }
 	$result = mysql_query($query,$con); 
 

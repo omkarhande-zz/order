@@ -1,8 +1,4 @@
 <?php
-/**
-		Connection configuration
-		
-    */
 	$configs = include('config.php');
 	// print_r($configs);
 	$con = mysql_connect($configs['host'],$configs['username'],$configs['password']);
