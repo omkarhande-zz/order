@@ -14,7 +14,7 @@ $json_array = array();
 
 
 
-	$query = "select o.*, p.id as pair_id from orders o join pairs p on p.cust_id=o.cust_id where o.stat = 2 and p.waiter_id=".$_REQUEST['waiter_id'] ;
+	$query = "select o.*, p.id as pair_id from orders o join pairs p on p.cust_id=o.cust_id where o.stat = 4 and p.waiter_id=".$_REQUEST['waiter_id'] ;
 	$result = mysql_query($query,$con); 
 	
 	

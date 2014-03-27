@@ -12,12 +12,12 @@ $apiKey = "AIzaSyCUXxiGzjyfWcpncCZ20ppEAGNsI_b2Nf0";
 $type = $_REQUEST['type'];
 $registrationIDs = array();
 
+$pair_id = $_REQUEST['pair_id'];
+
 if($type==1){
-	$cust_id = $_REQUEST['user_id'];
-	$query = "select u.gcm_id from users u join pairs p on p.waiter_id = u.id where p.cust_id=".$cust_id;
+	$query = "select u.gcm_id from users u join pairs p on p.waiter_id = u.id where p.id=".$pair_id;
 }else{
-	$waiter_id = $_REQUEST['user_id'];
-	$query = "select u.gcm_id from users u join pairs p on p.cust_id = u.id where p.waiter_id=".$waiter_id;
+	$query = "select u.gcm_id from users u join pairs p on p.cust_id = u.id where p.id=".$pair_id;
 }
 	$result = mysql_query($query,$con); 
 
@@ -28,7 +28,7 @@ if($type==1){
 		}
 	}
 
-	print_r($registrationIDs);
+	// print_r($registrationIDs);
 
 
 // $registrationIDs = array("APA91bH_YroqLMsfQXJbyOyX7QueJM4OampiZWhrS3tEhvFmDMvH8eZ87_1R0YTsV8ByERsCP3LHKGOSvFw25h6l6uMdbmwGPTn-MWZ0iIy3E_GdSVB7ZQwmHZKHrcGJfpdtnh2NHGPBfb6bMXKCQEHmnTYYG833pBn69h6d0yHwIKd0S58yD6Q",
@@ -40,7 +40,7 @@ $title = $_REQUEST['title'];
 $url = 'https://android.googleapis.com/gcm/send';
 $fields = array(
         'registration_ids'  => $registrationIDs,
-        'data'              => array("contentTitle"=>$title, "contentText"=>$message),
+        'data'              => array("contentTitle"=>$title, "contentText"=>$message, "type"=>$type),
         );
 $headers = array( 
         'Authorization: key=' . $apiKey,

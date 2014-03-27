@@ -26,6 +26,7 @@ $json_array = array();
 		$row_array['id'] = $row['id'];
 		$row_array['des'] = $row['des'];
 		$row_array['group_id'] = $row['group_id'];
+		$row_array['rate'] = $row['price'];
 		array_push($json_array,$row_array);
 	}
 		echo json_encode($json_array);

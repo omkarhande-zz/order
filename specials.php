@@ -1,8 +1,5 @@
 <?php
-/**
-		Connection configuration
-		
-    */
+
 	$configs = include('config.php');
 	// print_r($configs);
 	$con = mysql_connect($configs['host'],$configs['username'],$configs['password']);
@@ -27,15 +24,17 @@ $json_array = array();
 		$row_array['name'] = $row['name'];
 		$row_array['id'] = $row['id'];
 		$row_array['des'] = $row['des'];
+		$row_array['rate'] = $row['price'];
 		array_push($json_array,$row_array);
 	}
 		echo json_encode($json_array);
 		//echo "hello";
 	}
 	else{
-	$row_array['name'] = "Sample Item Name";
+		$row_array['name'] = "Sample Item Name";
 		$row_array['id'] = "-100";
 		$row_array['des'] = "Sample items very very long desc";
+		$row_array['rate'] = "150";
 		array_push($json_array,$row_array);
 		echo json_encode($json_array);
 	//	echo "Whazza";

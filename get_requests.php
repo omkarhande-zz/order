@@ -14,8 +14,22 @@ $json_array = array();
 
 
 
-	$query = "select r.id, i.name,r.quant,r.order_id, r.item_id, r.order_details_id,r.type from requests r left join 
-	items i on r.item_id = i.id where r.approved=0";
+	$query = "	select 
+					req.*, 
+					i.name
+				from 
+					(	select 
+							r.*, p.id as pair_id
+						from 
+							requests r 
+							join orders o 
+							join pairs p 
+						on r.order_id = o.id and o.cust_id = p.cust_id 
+						where p.waiter_id=".$_REQUEST['waiter_id']."
+					) as req 
+				left join items i on req.item_id = i.id 
+				where req.approved=0";
+
 	$result = mysql_query($query,$con); 
 	
 	
@@ -29,6 +43,7 @@ $json_array = array();
 			$row_array['quant'] = $row['quant'];
 			$row_array['order_details_id'] = $row['order_details_id'];
 			$row_array['type'] = $row['type'];
+			$row_array['pair_id'] = $row['pair_id'];
 			array_push($json_array,$row_array);
 		}
 		echo json_encode($json_array);
