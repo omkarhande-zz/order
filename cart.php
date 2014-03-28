@@ -14,7 +14,7 @@
 
 	$json_array = array();
 	
-	$query = "select id from orders where cust_id=".$_REQUEST['cust_id'];
+	$query = "select id from orders where stat in (1,2,3,4,5) and cust_id=".$_REQUEST['cust_id'];
 	// die($query);
 	$result = mysql_query($query,$con); 
 	if($result!=FALSE){
@@ -39,7 +39,14 @@
 				//echo "hello";
 		}
 
-	}
+	}else{
+				$row_array['id'] = "10001";
+				$row_array['name'] = "Cart is empty";
+				$row_array['quant'] = "0";
+				$row_array['total'] = "0";
+				array_push($json_array,$row_array);
+				echo json_encode($json_array);
+		}
 }
 
 	

@@ -20,15 +20,16 @@ $json_array = array();
 	
 
 	if($result!=FALSE){
-	while ($row = mysql_fetch_array($result)) {
-		$row_array['name'] = $row['name'];
-		$row_array['id'] = $row['id'];
-		$row_array['des'] = $row['des'];
-		$row_array['rate'] = $row['price'];
-		array_push($json_array,$row_array);
-	}
-		echo json_encode($json_array);
-		//echo "hello";
+		while ($row = mysql_fetch_array($result)) {
+			$row_array['name'] = $row['name'];
+			$row_array['id'] = $row['id'];
+			$row_array['des'] = $row['des'];
+			$row_array['rate'] = $row['price'];
+			$row_array['image_name'] = $row['image_name'];
+			array_push($json_array,$row_array);
+		}
+			echo json_encode($json_array);
+			//echo "hello";
 	}
 	else{
 		$row_array['name'] = "Sample Item Name";
