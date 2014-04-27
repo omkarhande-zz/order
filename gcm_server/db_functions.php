@@ -45,7 +45,12 @@ class DB_Functions {
      * Getting all users
      */
     public function getAllUsers() {
-        $result = mysql_query("select * FROM gcm_users");
+        $result = mysql_query("select u.*, if(u.user_type=1,'user','waiter') as type from users u where u.gcm_id is not null");
+        return $result;
+    }
+
+    public function getAllItems(){
+        $result = mysql_query("select * from items order by name");
         return $result;
     }
  

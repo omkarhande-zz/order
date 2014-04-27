@@ -14,10 +14,8 @@
 
 	$json_array = array();
 	
-	$query = "select id,stat from orders where cust_id=".$_REQUEST['cust_id'];
-	// die($query);
+	$query = "select id,stat from orders where stat in (1,2,3) and cust_id=".$_REQUEST['cust_id'];
 	$result = mysql_query($query,$con); 
-	if($result!=FALSE){
 	if(mysql_num_rows($result)){
 
 		$row = mysql_fetch_array($result);
@@ -29,13 +27,16 @@
 			$row['rsp'] = "Order Placed";
 		}else if ($stat == 2){
 			$row['rsp'] = "Order is up for approval";
-		}else if ($stat == 3){
+		}else{
 			$row['rsp'] = "Order was already placed";
 		}
 		array_push($json_array,$row);
 		echo json_encode($json_array);
+	}else{
+		$row['rsp'] = "No active orders";
+		array_push($json_array,$row);
+		echo json_encode($json_array);
 	}
-}
 
 	
 

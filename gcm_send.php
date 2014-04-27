@@ -12,7 +12,7 @@ $message = "testing Process";
 $url = 'https://android.googleapis.com/gcm/send';
 $fields = array(
         'registration_ids'  => $registrationIDs,
-        'data'              => array("message"=>$message,"ticketText"=>"New Notificatin", "contentTitle"=>"Order-Now", "contentText"=>"You have a new notification"),
+        'data'              => array("message"=>$message,"ticketText"=>"New Notificatin", "contentTitle"=>"Order-Now", "contentText"=>"You have a new notification","type"=>"1"),
         );
 $headers = array( 
         'Authorization: key=' . $apiKey,

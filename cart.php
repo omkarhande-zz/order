@@ -1,8 +1,5 @@
 <?php
-    /**
-		Connection configuration
-		
-    */
+   
 	$configs = include('config.php');
 	// print_r($configs);
 	$con = mysql_connect($configs['host'],$configs['username'],$configs['password']);
@@ -17,8 +14,8 @@
 	$query = "select id from orders where stat in (1,2,3,4,5) and cust_id=".$_REQUEST['cust_id'];
 	// die($query);
 	$result = mysql_query($query,$con); 
-	if($result!=FALSE){
 	if(mysql_num_rows($result)){
+
 
 		$row = mysql_fetch_array($result);
 		$order_id = $row['id'];
@@ -28,6 +25,7 @@
 		
 		$result = mysql_query($query,$con); 
 		if(mysql_num_rows($result)){
+			// echo "here";
 			while ($row = mysql_fetch_array($result)) {
 				$row_array['id'] = $row['id'];
 				$row_array['name'] = $row['name'];
@@ -47,10 +45,7 @@
 				array_push($json_array,$row_array);
 				echo json_encode($json_array);
 		}
-}
 
-	
-
-	mysql_query($query, $con);
+	// mysql_query($query, $con);
 mysql_close($con);
 ?>

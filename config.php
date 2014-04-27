@@ -2,10 +2,10 @@
 
 return array(
 
-    // 'host' => 'mysql.freehosting.com',
-    // 'username' => 'allabo34_omkar',
-    // 'password' => 'welcome123',
-    // 'db' => 'allabo34_maps'
+    // 'host' => 'sql3.freemysqlhosting.net',
+    // 'username' => 'sql336816',
+    // 'password' => 'qM3*vM3%',
+    // 'db' => 'sql336816'
 
     'host' => 'localhost',
     'username' => 'root',
