@@ -45,7 +45,7 @@ class DB_Functions {
      * Getting all users
      */
     public function getAllUsers() {
-        $result = mysql_query("select u.*, if(u.user_type=1,'user','waiter') as type from users u where u.gcm_id is not null");
+        $result = mysql_query("select u.*, if(u.user_type=1,'user','waiter') as type from users u where u.gcm_id is not null order by name");
         return $result;
     }
 

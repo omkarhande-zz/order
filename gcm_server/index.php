@@ -5,8 +5,10 @@
 
         <link rel="stylesheet" href="docsupport/prism.css">
         <link rel="stylesheet" href="chosen.css">
-
+        <link href="style/style.css" rel="stylesheet" type="text/css">
         <link rel="icon" type="image/png" href="192.168.144.1/order/gcm_server/food.png"/>
+        <link rel="icon" href="settings3.png" type="image/png" >
+        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
         
@@ -120,6 +122,8 @@
             background-color: #FFBABA;
             background-image: url('http://192.168.144.1/order/gcm_server/error.png');
             }
+
+            
         </style>
     </head>
 
@@ -130,12 +134,12 @@
         <h1 align="center"> ADMIN Panel </h1>
             <hr/>  
              <br/>
-             <div  id="success" class="success">User successfully added</div>
-        <div id="error"class="error">Error adding user</div>
+             <div  id="success" class="success" style="display: none;">User successfully added</div>
+        <div id="error"class="error"style="display: none;">Error adding user</div>
         <br/>
             <ul class="devices">
               <li>
-                <h2>Set today's specials:</h2>
+                <h2>Set Today's Specials:</h2>
                 
                     
           <select data-placeholder="Choose special items..." id="select-id" class="chzn-select" multiple style="width:350px;" tabindex="4">
@@ -168,7 +172,7 @@
         <li>
 
             <h2>Add Users: </h2>
-                    <form id ="1001" name="" method="post" onsubmit="return task()">
+                    <form id ="1001" name="" method="post" onsubmit="return task()" >
                         <label>Name: </label> <textarea rows="1" name="name"  style="width:200px;" class="txt_message" placeholder="Darth Vader"></textarea>
                         <div class="clear"></div>
                         <label>Email:</label> <textarea rows="1" name="email" style="width:200px;" class="txt_message" placeholder="vader@empire.com"></textarea>
@@ -187,15 +191,17 @@
                 <li>
 
             <h2>Add Item: </h2>
-                    <form id ="1002" name="" method="post" onsubmit="return addItem()">
+
+                    <form id ="1002" action="processupload.php" name="" method="post" enctype="multipart/form-data" >
                         <label>Name: </label> <textarea rows="1" name="name"  style="width:200px;" class="txt_message" placeholder="Choco lava cake"></textarea>
                         <div class="clear"></div>
                         <label>Desc:</label> <textarea rows="1" name="desc" style="width:200px;" class="txt_message" placeholder="Soft core"></textarea>
                         <div class="clear"></div>
                         <label>Price:</label> <textarea rows="1" name="price" style="width:200px;" class="txt_message" placeholder="250"></textarea>
                        <div class="clear"></div>
+                       <label>Type:</label>
                         <select id="sel_cat" name="type">
-                              <option value="type">Select category</option>
+                              <option value="type">Select</option>
                               <option value="1">Drinks</option>
                               <option value="2">Starters</option>
                               <option value="3">Main Course</option>
@@ -203,8 +209,13 @@
                               <option value="5">Rice</option>
                               <option value="6">Deserts</option>
                         </select>
-                        <input type="submit" class="send_btn" value="Add" onclick=""/>
+                        <div class="clear"></div><br/>
+                        <label>Upload Image:</label><input name="ImageFile" id="imageInput"  type="file" />   
+                                    
+                          <input type="submit" class="send_btn" value="Add" onclick=""/>                                 
                     </form>
+                    <img src="images/ajax-loader.gif" id="loading-img" style="display:none;" alt="Please Wait"/>
+                    <div id="output"></div>
                 </li>   
             </ul>
         </div>
@@ -242,7 +253,7 @@
                                     <input type="hidden" name="regId" value="<?php echo $row["gcm_id"] ?>"/>
                                     <input type="hidden" name="type" value="<?php echo $row["type"] ?>"/>
                                     <div class="clear">
-                                    <input type="submit" class="send_btn" style="float: right;" value="Send" onclick=""/>
+                                    <input type="submit" id="submit-btn" class="send_btn" style="float: right;" value="Send" onclick=""/>
                                 </div>
                             </form>
                         </li>
@@ -259,16 +270,105 @@
         <br/><h5 align="center"> By Omkar Hande<h5>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
         <script src="chosen.jquery.js" type="text/javascript"></script>
-         <script src="docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+        <script src="docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+
+        <script type="text/javascript" src="js/jquery.form.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
-                $('#success').hide();
-                $('#error').hide();
+
+                $('#success').text("Welcome, Admin!");
+                $('#success').show();
+                setTimeout(function(){
+                    $("#success").fadeOut('slow').wait(1000);
+                }, 1000);
+
+                var options = { 
+                       // target element(s) to be updated with server response 
+                    beforeSubmit:  beforeSubmit,  // pre-submit callback 
+                    success:       afterSuccess,  // post-submit callback 
+                    resetForm: true        // reset the form after successful submit 
+                  }; 
+                  
+                  // $('loading-img').show();
+                 $('#1002').submit(function() { 
+                    addItem();
+                    $(this).ajaxSubmit(options);    
+                    // always return false to prevent standard browser submit and page navigation 
+                    return false; 
+                  }); 
+
+
+
             });
+
+            function afterSuccess()
+            {
+              
+              $('#submit-btn').show(); //hide submit button
+              $('#loading-img').hide(); //hide submit button
+
+            }
+
+            //function to check file size before uploading.
+            function beforeSubmit(){
+                //check whether browser fully supports all File API
+
+               if (window.File && window.FileReader && window.FileList && window.Blob)
+              {
+
+                
+                if( !$('#imageInput').val()) //check empty input filed
+                {
+                  $("#output").html("Are you kidding me?");
+                  return false
+                }
+                
+                var fsize = $('#imageInput')[0].files[0].size; //get file size
+                var ftype = $('#imageInput')[0].files[0].type; // get file type
+                
+
+                //allow only valid image file types 
+                switch(ftype)
+                    {
+                        case 'image/png': case 'image/gif': case 'image/jpeg': case 'image/pjpeg':
+                            break;
+                        default:
+                            $("#output").html("<b>"+ftype+"</b> Unsupported file type!");
+                    return false
+                    }
+                
+                //Allowed file size is less than 1 MB (1048576)
+                if(fsize>1048576) 
+                {
+                  $("#output").html("<b>"+bytesToSize(fsize) +"</b> Too big Image file! <br />Please reduce the size of your photo using an image editor.");
+                  return false
+                }
+                    
+                $('#submit-btn').hide(); //hide submit button
+                $('#loading-img').show(); //hide submit button
+                $("#output").html("");  
+              }
+              else
+              {
+                //Output error to older unsupported browsers that doesn't support HTML5 File API
+                $("#output").html("Please upgrade your browser, because your current browser lacks some new features we need!");
+                return false;
+              }
+            }
+
+            //function to format bites bit.ly/19yoIPO
+            function bytesToSize(bytes) {
+               var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+               if (bytes == 0) return '0 Bytes';
+               var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+               return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+            }
 
             function sendPushNotification(id){
                 var data = $('form#'+id).serialize();
-                $('form#'+id).unbind('submit');                
+                $('form#'+id).unbind('submit');
+                  
+
                 $.ajax({
                     url: "send_message.php",
                     type: 'GET',
@@ -339,17 +439,18 @@
                                   }, 2000);
                             }
                         });    
+                  $('#select-id').val('rraaaaaaaaandoooom');
+                  $("#select-id").trigger("liszt:updated");
               }
             //   $(document).ready(function(){
             //     $('#success').hide();
             //     $('#error').hide();
             // });
-            function addItem(){
-                var r=confirm("Are you sure?");
-                if (r==true){
+            function addItem(){          
                     var data = $('form#'+"1002").serialize();
                 // alert(data);
-                $('form#'+"1002").unbind('submit');                
+                $('form#'+"1002").unbind('submit');    
+                           
                 $.ajax({
                     url: "add_item_db.php",
                     type: 'GET',
@@ -376,12 +477,10 @@
                     }
                 });
                 return false;
-                }
             }
 
             function task(){
-                var r=confirm("Are you sure?");
-                if (r==true){
+                
                     var data = $('form#'+"1001").serialize();
                  // alert(data);
                 $('form#'+"1001").unbind('submit');                
@@ -410,10 +509,10 @@
                     }
                 });
                 return false;
-                }
+                
             }
 
+            
         </script>
-
     </body>
 </html>

@@ -10,7 +10,7 @@ if (isset($_GET["regId"]) && isset($_GET["message"])) {
     $gcm = new GCM();
  
     $registatoin_ids = array($regId);
-    $message = array("message"=>$message,"ticketText"=>"New Notificatin", "contentTitle"=>$title, "contentText"=>$message." - Sent via web","type"=>$type);
+    $message = array("message"=>$message,"ticketText"=>"New Notificatin", "contentTitle"=>$title, "contentText"=>$message." - Sent by Admin","type"=>$type);
     $result = $gcm->send_notification($registatoin_ids, $message);
  
     echo $result;
